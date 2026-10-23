@@ -1,0 +1,135 @@
+/* ==========================================================================
+   Shatter Type — Interactive Crystalline Glass Headline Component
+   Assemble on entrance, crack under cursor, shatter on click
+   ========================================================================== */
+
+.shatter-type-wrapper {
+  position: relative;
+  display: block;
+  user-select: none;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.shatter-type-container {
+  position: relative;
+  display: block;
+  overflow: visible;
+}
+
+.shatter-type-text {
+  font-size: 2.85rem;
+  font-weight: 800;
+  color: var(--color-primary-navy);
+  line-height: 1.18;
+  letter-spacing: -0.5px;
+  margin: 0;
+  transition: opacity 0.15s ease, filter 0.2s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 10px rgba(21, 52, 91, 0.08);
+}
+
+.shatter-type-text.is-cracked {
+  filter: drop-shadow(0 0 1px rgba(21, 94, 239, 0.4));
+}
+
+.shatter-type-text.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Glass crack canvas overlay */
+.shatter-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Glass cracks SVG layer */
+.shatter-crack-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.shatter-crack-svg.active {
+  opacity: 1;
+}
+
+/* Shimmer reflection sweep effect */
+.shatter-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.shatter-type-wrapper:hover .shatter-shimmer {
+  animation: glassShimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes glassShimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* Interactive Hint Pill */
+.shatter-hint-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--color-main-blue);
+  background-color: var(--color-main-blue-light);
+  border: 1px solid #BFDBFE;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  margin-top: 6px;
+  margin-bottom: 14px;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.shatter-type-wrapper:hover + .shatter-hint-pill,
+.shatter-hint-pill:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.shatter-hint-pill svg {
+  animation: pulseRotate 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseRotate {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(45deg); }
+}
+
+/* Responsive Font Sizing */
+@media (max-width: 768px) {
+  .shatter-type-text {
+    font-size: 2.2rem;
+  }
+}

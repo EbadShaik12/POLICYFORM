@@ -1,0 +1,26 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-Che_lrQl.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DMsN-rLE.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/flex-carousel-init.jsx": {
+    "file": "assets/flex-carousel-init-ClKPJQ2J.js",
+    "name": "flex-carousel-init",
+    "src": "resources/js/flex-carousel-init.jsx",
+    "isEntry": true,
+    "css": [
+      "assets/flex-carousel-init-DS0lXvZ1.css"
+    ]
+  }
+}
