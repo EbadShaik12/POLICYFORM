@@ -31,6 +31,7 @@ $envVars = [
     'APP_PACKAGES_CACHE' => $cachePath . '/packages.php',
     'APP_ROUTES_CACHE' => $cachePath . '/routes-v7.php',
     'APP_SERVICES_CACHE' => $cachePath . '/services.php',
+    'APP_DEBUG' => 'true',
 ];
 
 foreach ($envVars as $key => $val) {
@@ -68,4 +69,16 @@ if (!file_exists($sqliteTmp)) {
 }
 
 // 6. Forward execution to Laravel's public/index.php
-require __DIR__ . '/../public/index.php';
+try {
+    require __DIR__ . '/../public/index.php';
+} catch (\Throwable $e) {
+    header('Content-Type: text/plain');
+    http_response_code(500);
+    echo "SERVERLESS BOOTSTRAP EXCEPTION:\n";
+    echo get_class($e) . ': ' . $e->getMessage() . "\n";
+    echo "File: " . $e->getFile() . ':' . $e->getLine() . "\n\n";
+    echo "Stack Trace:\n";
+    echo $e->getTraceAsString();
+    exit;
+}
+
