@@ -31,7 +31,6 @@ $envVars = [
     'APP_PACKAGES_CACHE' => $cachePath . '/packages.php',
     'APP_ROUTES_CACHE' => $cachePath . '/routes-v7.php',
     'APP_SERVICES_CACHE' => $cachePath . '/services.php',
-    'APP_DEBUG' => 'true',
 ];
 
 foreach ($envVars as $key => $val) {
@@ -48,13 +47,24 @@ if (empty(getenv('APP_KEY')) && empty($_ENV['APP_KEY']) && empty($_SERVER['APP_K
     $_SERVER['APP_KEY'] = $fallbackKey;
 }
 
-// 4. Pre-seed package & service caches into /tmp if available from repository
+// 4. Pre-seed package manifest into /tmp, filtering out any dev-only classes
 $originCache = __DIR__ . '/../bootstrap/cache';
 if (file_exists($originCache . '/packages.php') && !file_exists($cachePath . '/packages.php')) {
-    @copy($originCache . '/packages.php', $cachePath . '/packages.php');
-}
-if (file_exists($originCache . '/services.php') && !file_exists($cachePath . '/services.php')) {
-    @copy($originCache . '/services.php', $cachePath . '/services.php');
+    $packages = require $originCache . '/packages.php';
+    if (is_array($packages)) {
+        foreach ($packages as $pkgName => $pkgData) {
+            if (!empty($pkgData['providers'])) {
+                $packages[$pkgName]['providers'] = array_values(array_filter(
+                    $pkgData['providers'],
+                    fn ($cls) => class_exists($cls)
+                ));
+                if (empty($packages[$pkgName]['providers'])) {
+                    unset($packages[$pkgName]);
+                }
+            }
+        }
+        @file_put_contents($cachePath . '/packages.php', '<?php return ' . var_export($packages, true) . ';');
+    }
 }
 
 // 5. Copy sqlite database to /tmp if not present
@@ -69,16 +79,4 @@ if (!file_exists($sqliteTmp)) {
 }
 
 // 6. Forward execution to Laravel's public/index.php
-try {
-    require __DIR__ . '/../public/index.php';
-} catch (\Throwable $e) {
-    header('Content-Type: text/plain');
-    http_response_code(500);
-    echo "SERVERLESS BOOTSTRAP EXCEPTION:\n";
-    echo get_class($e) . ': ' . $e->getMessage() . "\n";
-    echo "File: " . $e->getFile() . ':' . $e->getLine() . "\n\n";
-    echo "Stack Trace:\n";
-    echo $e->getTraceAsString();
-    exit;
-}
-
+require __DIR__ . '/../public/index.php';

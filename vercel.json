@@ -36,7 +36,7 @@
   ],
   "env": {
     "APP_ENV": "production",
-    "APP_DEBUG": "true",
+    "APP_DEBUG": "false",
     "APP_KEY": "base64:VBlI8rSTKkEnSE33fCmr51bP7ZD5kawIvEMRvfatdks=",
     "APP_STORAGE": "/tmp/storage",
     "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
