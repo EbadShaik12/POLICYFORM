@@ -388,6 +388,21 @@ php artisan migrate:fresh
 
 ---
 
+## Deploying to Vercel
+
+PolicyFlow is pre-configured for one-click deployment to Vercel using `vercel.json` and the serverless `api/index.php` gateway.
+
+### Steps:
+1. Push your repository to GitHub.
+2. In the [Vercel Dashboard](https://vercel.com/dashboard), click **Add New** &rarr; **Project** and import your repository.
+3. In the **Environment Variables** section, add:
+   - `APP_KEY`: Generate using `php artisan key:generate --show` (or copy from `.env`).
+   - `GEMINI_API_KEY` *(Optional)*: Your Google Gemini API key for Maya AI.
+4. Click **Deploy**. Vercel will install dependencies without peer conflicts (via `.npmrc`), build frontend assets with Vite, and launch the serverless application.
+
+---
+
 ## Disclaimer
 
 PolicyFlow is an assessment project created solely for demonstration purposes. It is not an authorized financial distributor, insurance intermediary, or underwriter. All insurance plans, rates, policy numbers, and quotes are strictly fictional.
+
